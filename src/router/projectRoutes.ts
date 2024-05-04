@@ -4,7 +4,7 @@ import { ProjectController } from "../controllers/ProjectController";
 
 const router = Router();
 
-
+router.post('/', ProjectController.createProject)
 router.get('/', ProjectController.getAllProjects)
 
 
