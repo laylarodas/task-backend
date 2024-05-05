@@ -39,7 +39,7 @@ export class ProjectController {
             }
 
             res.json(project)
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -59,6 +59,24 @@ export class ProjectController {
 
             res.send('Updated project')
 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    static deleteProject = async (req: Request, res: Response) => {
+        const { id } = req.params
+        try {
+            const project = await Project.findById(id)
+
+            if (!project) {
+                const error = new Error('Project not found');
+                return res.status(404).json({error: error.message})
+            }
+
+            await project.deleteOne();
+            res.send('Deleted project')
+            
         } catch (error) {
             console.log(error)
         }
