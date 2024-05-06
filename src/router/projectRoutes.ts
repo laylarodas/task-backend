@@ -39,6 +39,11 @@ ProjectController.deleteProject)
 
 /***  Routes for tasks  ***/
 
-router.post('/:projectId/tasks', validateProjectExists, TaskController.createTask)
+router.post('/:projectId/tasks', 
+    validateProjectExists,  
+    body('name').notEmpty().withMessage('The task name is required'),
+    body('description').notEmpty().withMessage('The description is required'), 
+    handleInputErrors,
+TaskController.createTask)
 
 export default router;
