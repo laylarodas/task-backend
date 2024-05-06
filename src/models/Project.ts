@@ -30,6 +30,7 @@ const ProjectSchema: Schema = new Schema({
             ref: 'Task'
         }
     ]
+    
 }, {timestamps: true})
 
 const Project = mongoose.model<IProject>('Project', ProjectSchema)
