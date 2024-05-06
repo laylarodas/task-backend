@@ -5,7 +5,7 @@ export interface IProject extends Document {
     projectName: string,
     clientName: string,
     description: string,
-    task: PopulatedDoc<ITask & Document>[]//[]multiple tasks
+    tasks: PopulatedDoc<ITask & Document>[]//[]multiple tasks
 }
 
 const ProjectSchema: Schema = new Schema({
