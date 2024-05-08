@@ -38,6 +38,7 @@ ProjectController.deleteProject)
 
 
 /***  Routes for tasks  ***/
+router.param('projectId', validateProjectExists)
 
 router.post('/:projectId/tasks', 
     validateProjectExists,  
@@ -49,6 +50,13 @@ TaskController.createTask)
 router.get('/:projectId/tasks', 
     validateProjectExists,
     TaskController.getProjectTasks
+)
+
+router.get('/:projectId/tasks/:taskId', 
+    validateProjectExists,
+    param('taskId').isMongoId().withMessage('invalid ID'),
+    handleInputErrors,
+    TaskController.getTaskById
 )
 
 export default router;

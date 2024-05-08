@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import Project from '../models/Project';
 import Task from '../models/Task';
 
 
@@ -24,6 +23,24 @@ export class TaskController {
         try {
             const tasks = await Task.find({project: req.project.id}).populate('project')
             res.json(tasks)
+        } catch (error) {
+            res.status(500).json('There was a error')
+        }
+    }
+
+    static getTaskById = async (req: Request, res: Response) => {
+        try {
+            const { taskId } = req.params;
+            const task = await Task.findById(taskId)
+            if(!task){
+                const error =  new Error('Task not found')
+                return res.status(404).json({error: error.message})
+            }
+            if(task.project.toString() !== req.project.id){
+                const error =  new Error('Invalid action')
+                return res.status(400).json({error: error.message})
+            }
+            res.json(task)
         } catch (error) {
             res.status(500).json('There was a error')
         }
