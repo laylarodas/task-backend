@@ -27,5 +27,14 @@ router.post('/confirm-account',
     handleInputErrors,
 AuthController.confirmAccount)
 
+router.post('/login',
+    body('email')
+        .isEmail().withMessage('Invalid Email'),
+    body('password')
+        .notEmpty().withMessage('Password cannot be empty'),
+    handleInputErrors,
+AuthController.login
+)
+
 
 export default router
