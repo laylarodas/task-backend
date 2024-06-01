@@ -11,7 +11,7 @@ const tokenSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    userId: {
+    user: {
         type: Types.ObjectId,
         ref: 'User'
     },
