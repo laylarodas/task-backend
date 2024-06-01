@@ -4,6 +4,7 @@ import User from '../models/User'
 import { hashPassword } from '../utils/auth'
 import Token from '../models/Token'
 import { generateToken } from '../utils/token'
+import { transporter } from '../config/nodemailer'
 
 export class AuthController {
     static createAccount = async (req: Request, res: Response) => {
@@ -29,6 +30,15 @@ export class AuthController {
             const token = new Token()
             token.token = generateToken()
             token.user = user.id
+
+            //send email
+            await transporter.sendMail({
+                from: 'Task_MERN <admin@task.com>',
+                to: user.email,
+                subject: 'TASK - Email Confirmation',
+                text: 'Task- Confirm your email',
+                html: `<p>Checking email</p>`
+            })
 
             await Promise.allSettled([user.save(), token.save()])
 
