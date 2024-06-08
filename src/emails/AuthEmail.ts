@@ -23,4 +23,20 @@ export class AuthEmail {
 
     }
 
+    static sendPasswordResetToken = async (user: IEmail) => {
+        const info = await transporter.sendMail({
+            from: 'Task_MERN <admin@task.com>',
+            to: user.email,
+            subject: 'TASK - Reset Password',
+            text: 'Task- Reset your password',
+            html: `<p>Hello ${user.name}, you have requested to reset your password. <a href="${process.env.FRONTEND_URL}/auth/new-password">Reset Password</a></p>
+            <p>And introduce the code: <b>${user.token}</b></p>
+            <p>This token will expire in 10 minutes</p>
+            `
+        })
+
+        console.log('Message sent: %s', info.messageId)
+
+    }
+
 }

@@ -145,4 +145,40 @@ export class AuthController {
             res.status(500).json({ error: 'There was an error' })
         }
     }
+
+    static forgotPassword = async (req: Request, res: Response) => {
+        try {
+
+            const { email } = req.body
+
+            //Check if user exists
+            const user = await User.findOne({ email })
+            if (!user) {
+                const error = new Error('User is not registered')
+                return res.status(404).json({ error: error.message })
+            }
+
+            if(user.confirmed){
+                const error = new Error('User is already confirmed')
+                return res.status(403).json({ error: error.message })
+            }
+
+            //generate token
+            const token = new Token()
+            token.token = generateToken()
+            token.user = user.id
+            await token.save()
+
+            //send email
+            AuthEmail.sendPasswordResetToken({
+                email: user.email,
+                name: user.name,
+                token: token.token
+            })
+
+            res.send('A new confirmation code has been sent to your email')
+        } catch (error) {
+            res.status(500).json({ error: 'There was an error' })
+        }
+    }
 }
