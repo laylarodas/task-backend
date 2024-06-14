@@ -186,9 +186,10 @@ export class AuthController {
     static validateToken = async (req: Request, res: Response) => {
         try {
             const { token } = req.body
+            console.log(token)
             const tokenExists = await Token.findOne({ token })
             if (!tokenExists) {
-                const error = new Error('Token not found')
+                const error = new Error('Invalid token')
                 return res.status(404).json({ error: error.message })
             }
 
@@ -202,9 +203,10 @@ export class AuthController {
 
     static updatePasswordWithToken = async (req: Request, res: Response) => {
         try {
-            const { token } = req.body
+            const { token } = req.params
             const { password } = req.body
 
+            console.log(token)
             const tokenExists = await Token.findOne({ token })
             if (!tokenExists) {
                 const error = new Error('Token not found')
