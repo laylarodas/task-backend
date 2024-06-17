@@ -10,8 +10,9 @@ import { authenticate } from "../middleware/auth";
 
 const router = Router();
 
+router.use(authenticate)
+
 router.post('/',
-    authenticate,
     body('projectName').notEmpty().withMessage('The project name is required'),
     body('clientName').notEmpty().withMessage('The client name is required'),
     body('description').notEmpty().withMessage('The description is required'),
@@ -19,7 +20,7 @@ router.post('/',
 ProjectController.createProject)
 
 
-router.get('/', authenticate, ProjectController.getAllProjects)
+router.get('/', ProjectController.getAllProjects)
 
 router.get('/:id', 
     param('id').isMongoId().withMessage('invalid ID'),
