@@ -24,7 +24,11 @@ export class ProjectController {
         
         try {
 
-            const projects= await Project.find({})
+            const projects= await Project.find({
+                $or: [
+                    {manager: { $in: req.user._id }}
+                ]
+            })
 
             res.json(projects)
 
