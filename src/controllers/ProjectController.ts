@@ -67,6 +67,13 @@ export class ProjectController {
                 const error = new Error('Project not found');
                 return res.status(404).json({error: error.message})
             }
+
+            if (project.manager.toString() !== req.user._id.toString()) {
+                const error = new Error('Only the manager can update the project');
+                return res.status(404).json({error: error.message})
+            }
+
+
             project.clientName =  req.body.clientName
             project.projectName =  req.body.projectName
             project.description =  req.body.description
@@ -86,6 +93,11 @@ export class ProjectController {
 
             if (!project) {
                 const error = new Error('Project not found');
+                return res.status(404).json({error: error.message})
+            }
+
+            if (project.manager.toString() !== req.user._id.toString()) {
+                const error = new Error('Only the manager can delete the project');
                 return res.status(404).json({error: error.message})
             }
 
