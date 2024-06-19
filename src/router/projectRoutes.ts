@@ -95,4 +95,11 @@ router.post('/:projectId/team/find',
 
 )
 
+router.post('/:projectId/team',
+    body('id')
+        .isMongoId().withMessage('Invalid ID'),
+    handleInputErrors,
+    TeamMemberController.addMemberById
+)
+
 export default router;
