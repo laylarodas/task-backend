@@ -95,6 +95,8 @@ router.post('/:projectId/team/find',
 
 )
 
+router.get('/:projectId/team', TeamMemberController.getProjectTeam)
+
 router.post('/:projectId/team',
     body('id')
         .isMongoId().withMessage('Invalid ID'),
