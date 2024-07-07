@@ -102,10 +102,10 @@ export class AuthController {
                 return res.status(401).json({ error: error.message })
             }
 
-            const token = generateJWT({id: user._id})
+            const token = generateJWT({ id: user._id })
             res.send(token)
 
-        
+
         } catch (error) {
             res.status(500).json({ error: 'There was an error' })
         }
@@ -123,7 +123,7 @@ export class AuthController {
                 return res.status(404).json({ error: error.message })
             }
 
-            if(user.confirmed){
+            if (user.confirmed) {
                 const error = new Error('User is already confirmed')
                 return res.status(403).json({ error: error.message })
             }
@@ -160,7 +160,7 @@ export class AuthController {
                 return res.status(404).json({ error: error.message })
             }
 
-            if(user.confirmed){
+            if (user.confirmed) {
                 const error = new Error('User is already confirmed')
                 return res.status(403).json({ error: error.message })
             }
@@ -184,7 +184,7 @@ export class AuthController {
         }
     }
 
-    
+
     static validateToken = async (req: Request, res: Response) => {
         try {
             const { token } = req.body
@@ -236,11 +236,11 @@ export class AuthController {
         const { name, email } = req.body
 
 
-        const userExists = await User.findOne({email})
+        const userExists = await User.findOne({ email })
 
-        console.log(req.user._id , userExists?._id)
+        console.log(req.user._id, userExists?._id)
 
-        if(userExists && userExists._id !== req.user._id){
+        if (userExists && userExists._id !== req.user._id) {
             const error = new Error('Email is already in use')
             return res.status(409).json({ error: error.message })
         }
@@ -251,6 +251,27 @@ export class AuthController {
         try {
             await req.user.save()
             res.send('Profile updated')
+        } catch (error) {
+            res.status(500).json({ error: 'There was an error' })
+        }
+    }
+
+    static updatePassword = async (req: Request, res: Response) => {
+        const { current_password, password } = req.body
+
+        const user = await User.findById(req.user._id)
+        const isPasswordCorrect = await checkPassword(current_password, user.password)
+
+        if (!isPasswordCorrect) {
+            const error = new Error('Invalid password')
+            return res.status(401).json({ error: error.message })
+        }
+        
+
+        try {
+            user.password = await hashPassword(password)
+            await user.save()
+            res.send('Password updated')
         } catch (error) {
             res.status(500).json({ error: 'There was an error' })
         }
